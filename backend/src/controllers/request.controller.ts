@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import { z } from 'zod';
 
+import { prisma } from '../lib/prisma';
 import { sendRequestMail } from '../services/mail.service';
 
 const requestSchema = z.object({
@@ -9,19 +10,27 @@ const requestSchema = z.object({
     message: z.string().optional(),
 });
 
-export const createRequest = async (
-    req: Request,
-    res: Response
-) => {
+export const createRequest = async (req: Request, res: Response) => {
     try {
         const data = requestSchema.parse(req.body);
+
+        const request = await prisma.request.create({
+            data: {
+                name: data.name,
+                phone: data.phone,
+                message: data.message,
+            },
+        });
 
         await sendRequestMail(data);
 
         return res.status(201).json({
             message: 'Заявка успешно отправлена',
+            request,
         });
-    } catch {
+    } catch (error) {
+        console.error(error);
+
         return res.status(400).json({
             message: 'Ошибка отправки заявки',
         });
