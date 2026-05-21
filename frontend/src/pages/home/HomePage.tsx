@@ -1,33 +1,23 @@
+import { Header } from '../../widgets/header/Header';
+import { Hero } from '../../widgets/hero/Hero';
+import { Problems } from '../../widgets/problems/Problems';
+import { Benefits } from '../../widgets/benefits/Benefits';
+import { Steps } from '../../widgets/steps/Steps';
+import { RequestForm } from '../../widgets/request-form/RequestForm';
+import { Footer } from '../../widgets/footer/Footer';
+
 import styles from './HomePage.module.scss';
 
 export const HomePage = () => {
     return (
         <main className={styles.page}>
-            <section className={styles.hero}>
-                <div className={styles.container}>
-                    <div className={styles.content}>
-                        <p className={styles.label}>Ремонт стиральных машин</p>
-
-                        <h1 className={styles.title}>
-                            Ремонт стиральных машин на дому
-                        </h1>
-
-                        <p className={styles.text}>
-                            Быстро, качественно и с гарантией до 2 лет на все виды работ
-                        </p>
-
-                        <div className={styles.actions}>
-                            <a href="tel:+74951234567" className={styles.primaryButton}>
-                                Позвонить
-                            </a>
-
-                            <a href="#request" className={styles.secondaryButton}>
-                                Написать
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            <Header />
+            <Hero />
+            <Problems />
+            <Benefits />
+            <Steps />
+            <RequestForm />
+            <Footer />
         </main>
     );
 };

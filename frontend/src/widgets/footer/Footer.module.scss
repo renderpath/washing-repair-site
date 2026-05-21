@@ -1,0 +1,52 @@
+.footer {
+	padding: 28px 0;
+	color: #ffffff;
+	background: #0f1f3d;
+}
+
+.footer > div {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 24px;
+}
+
+.logo {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+
+	strong {
+		display: block;
+		font-size: 18px;
+	}
+
+	span {
+		display: block;
+		margin-top: 4px;
+		color: rgba(255, 255, 255, 0.72);
+	}
+}
+
+.logoIcon {
+	width: 48px;
+	height: 48px;
+	border-radius: 14px;
+	display: grid;
+	place-items: center;
+	color: #ffffff;
+	border: 2px solid rgba(255, 255, 255, 0.7);
+	font-size: 30px;
+}
+
+p {
+	margin: 0;
+	color: rgba(255, 255, 255, 0.7);
+}
+
+@media (max-width: 640px) {
+	.footer > div {
+		align-items: flex-start;
+		flex-direction: column;
+	}
+}

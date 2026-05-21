@@ -1,0 +1,159 @@
+.request {
+	padding: 72px 0;
+	background: linear-gradient(135deg, #eaf4ff 0%, #ffffff 100%);
+}
+
+.request > div {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) 520px;
+	align-items: center;
+	gap: 56px;
+}
+
+.info {
+	h2 {
+		margin: 0 0 18px;
+		max-width: 560px;
+		color: #0f1f3d;
+		font-size: 36px;
+		line-height: 1.2;
+	}
+
+	> p {
+		margin: 0 0 32px;
+		max-width: 620px;
+		color: #50607a;
+		font-size: 22px;
+		line-height: 1.45;
+	}
+}
+
+.contact {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	margin-bottom: 24px;
+
+	> svg {
+		width: 46px;
+		height: 46px;
+		padding: 10px;
+		flex: 0 0 auto;
+		border-radius: 50%;
+		color: #1769e0;
+		background: #ffffff;
+		box-shadow: 0 10px 30px rgba(15, 31, 61, 0.08);
+	}
+
+	strong {
+		display: block;
+		color: #0f1f3d;
+		font-size: 22px;
+		line-height: 1.25;
+	}
+
+	span {
+		display: block;
+		margin-top: 6px;
+		color: #50607a;
+		font-size: 16px;
+		line-height: 1.35;
+	}
+}
+
+.form {
+	padding: 32px;
+	border-radius: 16px;
+	background: #ffffff;
+	box-shadow: 0 20px 60px rgba(15, 31, 61, 0.1);
+
+	h3 {
+		margin: 0 0 22px;
+		color: #0f1f3d;
+		font-size: 24px;
+	}
+
+	input,
+	textarea {
+		width: 100%;
+		margin-bottom: 14px;
+		padding: 16px;
+		border: 1px solid #dce5f2;
+		border-radius: 8px;
+		color: #0f1f3d;
+		background: #ffffff;
+		outline: none;
+
+		&::placeholder {
+			color: #7a8496;
+		}
+
+		&:focus {
+			border-color: #1769e0;
+		}
+	}
+
+	textarea {
+		min-height: 120px;
+		resize: vertical;
+	}
+
+	button {
+		width: 100%;
+		height: 56px;
+		border: 0;
+		border-radius: 8px;
+		color: #ffffff;
+		background: #1769e0;
+		font-weight: 800;
+		text-transform: uppercase;
+		cursor: pointer;
+
+		&:disabled {
+			opacity: 0.7;
+			cursor: not-allowed;
+		}
+	}
+
+	small {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		margin-top: 16px;
+		color: #657086;
+	}
+}
+
+.success {
+	margin: 14px 0 0;
+	color: #138a3d;
+}
+
+.error {
+	margin: 14px 0 0;
+	color: #d93025;
+}
+
+@media (max-width: 980px) {
+	.request > div {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (max-width: 640px) {
+	.request {
+		padding: 48px 0;
+	}
+
+	.form {
+		padding: 24px;
+	}
+
+	.info h2 {
+		font-size: 30px;
+	}
+
+	.info > p {
+		font-size: 18px;
+	}
+}

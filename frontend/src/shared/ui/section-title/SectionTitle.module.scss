@@ -1,0 +1,18 @@
+.title {
+	position: relative;
+	margin: 0 0 52px;
+	text-align: center;
+	font-size: 34px;
+
+	&::after {
+		content: '';
+		position: absolute;
+		left: 50%;
+		bottom: -18px;
+		width: 62px;
+		height: 4px;
+		border-radius: 999px;
+		background: #1769e0;
+		transform: translateX(-50%);
+	}
+}
