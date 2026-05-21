@@ -11,36 +11,96 @@ import styles from './RequestForm.module.scss';
 type FormState = {
     name: string;
     phone: string;
+    address: string;
     message: string;
 };
+
+type FormErrors = Partial<Record<keyof FormState, string>>;
 
 const initialState: FormState = {
     name: '',
     phone: '',
+    address: '',
     message: '',
+};
+
+const formatPhone = (value: string) => {
+    const digits = value.replace(/\D/g, '').slice(0, 11);
+    const normalized = digits.startsWith('8')
+        ? `7${digits.slice(1)}`
+        : digits.startsWith('7')
+            ? digits
+            : `7${digits}`;
+
+    const phone = normalized.slice(0, 11);
+
+    const part1 = phone.slice(1, 4);
+    const part2 = phone.slice(4, 7);
+    const part3 = phone.slice(7, 9);
+    const part4 = phone.slice(9, 11);
+
+    let result = '+7';
+
+    if (part1) result += ` (${part1}`;
+    if (part1.length === 3) result += ')';
+    if (part2) result += ` ${part2}`;
+    if (part3) result += `-${part3}`;
+    if (part4) result += `-${part4}`;
+
+    return result;
 };
 
 export const RequestForm = () => {
     const [form, setForm] = useState<FormState>(initialState);
+    const [errors, setErrors] = useState<FormErrors>({});
     const [isLoading, setIsLoading] = useState(false);
     const [status, setStatus] = useState<'success' | 'error' | null>(null);
 
-    const handleChange = (
-        field: keyof FormState,
-        value: string
-    ) => {
+    const handleChange = (field: keyof FormState, value: string) => {
+        const nextValue = field === 'phone' ? formatPhone(value) : value;
+
         setForm((prev) => ({
             ...prev,
-            [field]: value,
+            [field]: nextValue,
+        }));
+
+        setErrors((prev) => ({
+            ...prev,
+            [field]: '',
         }));
 
         setStatus(null);
     };
 
+    const validateForm = () => {
+        const newErrors: FormErrors = {};
+        const phoneDigits = form.phone.replace(/\D/g, '');
+
+        if (form.name.trim().length < 2) {
+            newErrors.name = 'Введите имя минимум из 2 символов';
+        }
+
+        if (phoneDigits.length !== 11) {
+            newErrors.phone = 'Введите полный номер телефона';
+        }
+
+        if (form.address.trim().length < 5) {
+            newErrors.address = 'Введите адрес выезда';
+        }
+
+        if (form.message.trim().length < 5) {
+            newErrors.message = 'Опишите проблему минимум в 5 символов';
+        }
+
+        setErrors(newErrors);
+
+        return Object.keys(newErrors).length === 0;
+    };
+
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        if (!form.name.trim() || !form.phone.trim()) {
+        if (!validateForm()) {
             setStatus('error');
             return;
         }
@@ -48,9 +108,15 @@ export const RequestForm = () => {
         try {
             setIsLoading(true);
 
-            await requestApi.post('/api/requests', form);
+            await requestApi.post('/api/requests', {
+                name: form.name.trim(),
+                phone: form.phone,
+                address: form.address.trim(),
+                message: form.message.trim(),
+            });
 
             setForm(initialState);
+            setErrors({});
             setStatus('success');
         } catch {
             setStatus('error');
@@ -94,28 +160,47 @@ export const RequestForm = () => {
                     </div>
                 </div>
 
-                <form className={styles.form} onSubmit={handleSubmit}>
+                <form className={styles.form} onSubmit={handleSubmit} noValidate>
                     <h3>Оставить заявку</h3>
 
-                    <input
-                        type="text"
-                        placeholder="Ваше имя"
-                        value={form.name}
-                        onChange={(event) => handleChange('name', event.target.value)}
-                    />
+                    <label>
+                        <input
+                            type="text"
+                            placeholder="Ваше имя"
+                            value={form.name}
+                            onChange={(event) => handleChange('name', event.target.value)}
+                        />
+                        {errors.name && <span>{errors.name}</span>}
+                    </label>
 
-                    <input
-                        type="tel"
-                        placeholder="Телефон"
-                        value={form.phone}
-                        onChange={(event) => handleChange('phone', event.target.value)}
-                    />
+                    <label>
+                        <input
+                            type="tel"
+                            placeholder="+7 (___) ___-__-__"
+                            value={form.phone}
+                            onChange={(event) => handleChange('phone', event.target.value)}
+                        />
+                        {errors.phone && <span>{errors.phone}</span>}
+                    </label>
 
-                    <textarea
-                        placeholder="Опишите проблему"
-                        value={form.message}
-                        onChange={(event) => handleChange('message', event.target.value)}
-                    />
+                    <label>
+                        <input
+                            type="text"
+                            placeholder="Адрес выезда"
+                            value={form.address}
+                            onChange={(event) => handleChange('address', event.target.value)}
+                        />
+                        {errors.address && <span>{errors.address}</span>}
+                    </label>
+
+                    <label>
+            <textarea
+                placeholder="Опишите проблему"
+                value={form.message}
+                onChange={(event) => handleChange('message', event.target.value)}
+            />
+                        {errors.message && <span>{errors.message}</span>}
+                    </label>
 
                     <button type="submit" disabled={isLoading}>
                         {isLoading ? 'Отправка...' : 'Отправить заявку'}
@@ -129,7 +214,7 @@ export const RequestForm = () => {
 
                     {status === 'error' && (
                         <p className={styles.error}>
-                            Заполните имя и телефон. Если ошибка повторится — попробуйте позже.
+                            Проверьте правильность заполнения формы.
                         </p>
                     )}
 

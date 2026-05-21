@@ -73,10 +73,22 @@
 		font-size: 24px;
 	}
 
+	label {
+		display: block;
+		margin-bottom: 14px;
+
+		span {
+			display: block;
+			margin-top: 6px;
+			color: #d93025;
+			font-size: 13px;
+			line-height: 1.35;
+		}
+	}
+
 	input,
 	textarea {
 		width: 100%;
-		margin-bottom: 14px;
 		padding: 16px;
 		border: 1px solid #dce5f2;
 		border-radius: 8px;
@@ -90,6 +102,7 @@
 
 		&:focus {
 			border-color: #1769e0;
+			box-shadow: 0 0 0 3px rgba(23, 105, 224, 0.1);
 		}
 	}
 

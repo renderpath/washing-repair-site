@@ -6,6 +6,7 @@ export type RepairRequest = {
     id: number;
     name: string;
     phone: string;
+    address: string;
     message: string | null;
     status: RequestStatus;
     createdAt: string;

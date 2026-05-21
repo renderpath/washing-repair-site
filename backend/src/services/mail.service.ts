@@ -3,7 +3,8 @@ import nodemailer from 'nodemailer';
 type RequestMailData = {
     name: string;
     phone: string;
-    message?: string;
+    address: string;
+    message: string;
 };
 
 export const sendRequestMail = async (data: RequestMailData) => {
@@ -25,7 +26,8 @@ export const sendRequestMail = async (data: RequestMailData) => {
       <h2>Новая заявка с сайта</h2>
       <p><b>Имя:</b> ${data.name}</p>
       <p><b>Телефон:</b> ${data.phone}</p>
-      <p><b>Проблема:</b> ${data.message || 'Не указана'}</p>
+      <p><b>Адрес:</b> ${data.address}</p>
+      <p><b>Проблема:</b> ${data.message}</p>
     `,
     });
 };

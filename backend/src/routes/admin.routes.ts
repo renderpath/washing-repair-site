@@ -1,15 +1,15 @@
 import { Router } from 'express';
 
+import {
+    getRequests,
+    loginAdmin,
+    updateRequestStatus,
+} from '../controllers/admin.controller';
+
+import { authMiddleware } from '../middlewares/auth.middleware';
+
 export const adminRouter = Router();
 
-adminRouter.post('/login', (req, res) => {
-    console.log('LOGIN BODY:', req.body);
-
-    return res.json({
-        token: 'test-token',
-    });
-});
-
-adminRouter.get('/requests', (_req, res) => {
-    return res.json([]);
-});
+adminRouter.post('/login', loginAdmin);
+adminRouter.get('/requests', authMiddleware, getRequests);
+adminRouter.patch('/requests/:id/status', authMiddleware, updateRequestStatus);
