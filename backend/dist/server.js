@@ -1,0 +1,8 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+require("dotenv/config");
+const app_1 = require("./app");
+const PORT = 5001;
+app_1.app.listen(PORT, () => {
+    console.log(`Server started on port ${PORT}`);
+});

@@ -4,13 +4,14 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  // url      = env("DATABASE_URL")
 }
 
 model Request {
   id        Int      @id @default(autoincrement())
   name      String
   phone     String
-  address   String
+  address   String?
   message   String?
   status    String   @default("new")
   createdAt DateTime @default(now())

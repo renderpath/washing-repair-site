@@ -2,7 +2,9 @@ import type { Request, Response } from 'express';
 import { z } from 'zod';
 
 import { prisma } from '../lib/prisma';
+
 import { sendRequestMail } from '../services/mail.service';
+import { sendTelegramNotification } from '../services/telegram.service';
 
 const requestSchema = z.object({
     name: z.string().min(2),
@@ -16,11 +18,7 @@ export const createRequest = async (
     res: Response
 ) => {
     try {
-        console.log('BODY:', req.body);
-
         const data = requestSchema.parse(req.body);
-
-        console.log('VALIDATED:', data);
 
         const request = await prisma.request.create({
             data: {
@@ -31,11 +29,13 @@ export const createRequest = async (
             },
         });
 
-        console.log('REQUEST SAVED');
+        sendRequestMail(data).catch((error) => {
+            console.error('MAIL ERROR:', error);
+        });
 
-        await sendRequestMail(data);
-
-        console.log('MAIL SENT');
+        sendTelegramNotification(data).catch((error) => {
+            console.error('TELEGRAM ERROR:', error);
+        });
 
         return res.status(201).json({
             message: 'Заявка успешно отправлена',
@@ -44,7 +44,7 @@ export const createRequest = async (
     } catch (error) {
         console.error('CREATE REQUEST ERROR:', error);
 
-        return res.status(500).json({
+        return res.status(400).json({
             message: 'Ошибка отправки заявки',
         });
     }

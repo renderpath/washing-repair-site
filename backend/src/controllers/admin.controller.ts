@@ -60,17 +60,16 @@ export const getRequests = async (
     res: Response
 ) => {
     try {
-        const requests = await prisma.request.findMany();
-
-        console.log(requests);
+        const requests = await prisma.request.findMany({
+            orderBy: {
+                createdAt: 'desc',
+            },
+        });
 
         return res.json(requests);
-    } catch (error) {
-        console.error(error);
-
+    } catch {
         return res.status(500).json({
             message: 'Ошибка получения заявок',
-            error,
         });
     }
 };
@@ -97,6 +96,29 @@ export const updateRequestStatus = async (
     } catch {
         return res.status(400).json({
             message: 'Ошибка обновления статуса',
+        });
+    }
+};
+
+export const deleteRequest = async (
+    req: Request,
+    res: Response
+) => {
+    try {
+        const id = Number(req.params.id);
+
+        await prisma.request.delete({
+            where: {
+                id,
+            },
+        });
+
+        return res.json({
+            message: 'Заявка удалена',
+        });
+    } catch {
+        return res.status(400).json({
+            message: 'Ошибка удаления заявки',
         });
     }
 };

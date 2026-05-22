@@ -51,3 +51,18 @@ export const updateRequestStatus = async (
 
     return response.data;
 };
+
+export const deleteRequest = async (id: number) => {
+    const token = localStorage.getItem('admin_token');
+
+    const response = await requestApi.delete(
+        `/api/admin/requests/${id}`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        }
+    );
+
+    return response.data;
+};
